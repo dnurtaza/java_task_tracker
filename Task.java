@@ -1,6 +1,6 @@
 import enums.TaskStatus;
 
-class TaskTracker
+class Task
 {
     private int id;
     private String description;
