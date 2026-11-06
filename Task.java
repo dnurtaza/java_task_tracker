@@ -8,7 +8,7 @@ class Task
     private String createdAt;
     private String updatedAt;
 
-    TaskTracker(int id, String description, TaskStatus status, String createdAt, String updatedAt)
+    Task(int id, String description, TaskStatus status, String createdAt, String updatedAt)
     {
         this.id = id;
         this.description = description;
@@ -28,4 +28,12 @@ class Task
     public void setStatus(TaskStatus status) { this.status = status; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
+
+    public String toJson()
+    {
+        return String.format(
+                "\"id\": %d, \"description\": \"%s\", \"status\": \"%s\", \"createdAt\": \"%s\", \"updatedAt\": \"%s\"",
+                id, description, status.getTitle(), createdAt, updatedAt
+        );
+    }
 }
