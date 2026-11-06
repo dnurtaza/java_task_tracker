@@ -2,13 +2,20 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.IOException;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
+import enums.TaskStatus;
+
 class JsonStorage {
     private static final String FILE_NAME = "tasks.json";
 
-    public static void saveToJson(String jsonContent)
+    public static void saveToJson(String json)
     {
         try {
-            Files.writeString(Path.of(FILE_NAME), jsonContent);
+            Files.writeString(Path.of(FILE_NAME), json);
         } catch (IOException e) {
             System.err.println("Error, while trying to write: " + e.getMessage());
         }
@@ -23,7 +30,7 @@ class JsonStorage {
         }
 
         try {
-            return Files.readString(path);
+            return Files.readString(path).trim();
         } catch (IOException e) {
             System.err.println("Error, while trying to read: " + e.getMessage());
             return "[]";
