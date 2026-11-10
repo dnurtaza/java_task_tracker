@@ -45,6 +45,8 @@ class TaskService
             String updatedAt = "";
 
             String[] kv = new String[2];
+
+            outerLoop:
             for (String field : fields) {
                 kv = field.replace("\"", "").trim().split("\\s*:\\s*", 2);
 
@@ -56,14 +58,17 @@ class TaskService
                 switch (key) {
                     case "id" -> id = Integer.parseInt(val);
                     case "description" -> desc = val;
-                    case "status" -> status = TaskStatus.fromTitle(val);
+                    case "status" -> {
+                        if (TaskStatus.fromTitle(val) == null) continue outerLoop;
+                        status = TaskStatus.fromTitle(val);
+                    }
                     case "createdAt" -> createdAt = val;
                     case "updatedAt" -> updatedAt = val;
                 }
             }
 
             if (kv.length < 2) { continue; }
-
+            System.out.println(status);
             taskList.put(id, new Task(id, desc, status, createdAt, updatedAt));
         }
 
