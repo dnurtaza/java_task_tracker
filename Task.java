@@ -32,7 +32,7 @@ class Task
     public String toJson()
     {
         return String.format(
-                "\"id\": %d, \"description\": \"%s\", \"status\": \"%s\", \"createdAt\": \"%s\", \"updatedAt\": \"%s\"",
+                "{\"id\": %d, \"description\": \"%s\", \"status\": \"%s\", \"createdAt\": \"%s\", \"updatedAt\": \"%s\"}",
                 id, description, status.getTitle(), createdAt, updatedAt
         );
     }
