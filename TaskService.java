@@ -1,10 +1,14 @@
 import java.util.Map;
 import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import enums.TaskStatus;
 
 class TaskService
 {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
     public static String fromTaskListToJson(Map<Integer, Task> taskList)
     {
         if (taskList.isEmpty()) return "[]";
@@ -86,7 +90,12 @@ class TaskService
 
         if (taskList.isEmpty() || !taskList.containsKey(id)) return;
 
-        taskList.get(id).setDescription(desc);
+        Task task = taskList.get(id);
+
+        task.setDescription(desc);
+
+        String now = LocalDateTime.now().format(FORMATTER);
+        task.setUpdatedAt(now);
 
         JsonStorage.saveToJson(fromTaskListToJson(taskList));
     }
@@ -97,7 +106,12 @@ class TaskService
 
         if (taskList.isEmpty() || !taskList.containsKey(id)) return;
 
-        taskList.get(id).setStatus(status);
+        Task task = taskList.get(id);
+
+        task.setStatus(status);
+
+        String now = LocalDateTime.now().format(FORMATTER);
+        task.setUpdatedAt(now);
 
         JsonStorage.saveToJson(fromTaskListToJson(taskList));
     }
@@ -113,6 +127,14 @@ class TaskService
         JsonStorage.saveToJson(fromTaskListToJson(taskList));
     }
 
+    public static void listAllTasks()
+    {
+        getTaskList().values().stream()
+                .forEach(task -> System.out.println(
+                        task.toString()
+                ));
+    }
+
     public static void listTasksByStatus(TaskStatus status)
     {
         Map<Integer, Task> taskList = getTaskList();
@@ -123,7 +145,7 @@ class TaskService
                 .stream()
                 .filter(task -> task.getStatus().equals(status))
                 .forEach(task -> System.out.println(
-                        String.format("ID: %d | Description: %s", task.getId(), task.getDescription())
+                    task.toString()
                 ));
     }
 }
