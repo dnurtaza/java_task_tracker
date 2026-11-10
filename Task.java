@@ -52,4 +52,12 @@ class Task
                 id, description, status.getTitle(), createdAt, updatedAt
         );
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("ID: %d | Description: %s | Status: %s | Created: %s | Updated: %s",
+                getId(), getDescription(), getStatus().getTitle(), getCreatedAt(), getUpdatedAt()
+        );
+    }
 }
