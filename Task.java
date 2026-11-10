@@ -1,3 +1,6 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import enums.TaskStatus;
 
 class Task
@@ -7,6 +10,19 @@ class Task
     private TaskStatus status;
     private String createdAt;
     private String updatedAt;
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+    Task(int id, String description)
+    {
+        String currentDateTime = LocalDateTime.now().format(FORMATTER);
+
+        this.id = id;
+        this.description = description;
+        this.status = TaskStatus.TO_DO;
+        this.createdAt = currentDateTime;
+        this.updatedAt = currentDateTime;
+    }
 
     Task(int id, String description, TaskStatus status, String createdAt, String updatedAt)
     {
