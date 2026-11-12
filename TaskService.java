@@ -1,5 +1,7 @@
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collections;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -8,6 +10,21 @@ import enums.TaskStatus;
 class TaskService
 {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    private static int idCounter = 1;
+
+    public static int getIdCounter()
+    {
+        return idCounter;
+    }
+
+    public static void initializeIdCounter()
+    {
+        Map<Integer, Task> taskList = getTaskList();
+
+        if (taskList.isEmpty()) return;
+
+        idCounter = Collections.max(taskList.keySet());
+    }
 
     public static String fromTaskListToJson(Map<Integer, Task> taskList)
     {
@@ -15,8 +32,10 @@ class TaskService
 
         String json = "[";
 
+        int i = 1;
         for (Task task : taskList.values()) {
-            json += task.toJson() + ",";
+            json += task.toJson() + ((i != taskList.size()) ? "," : "");
+            i += 1;
         }
 
         json += "]";
@@ -32,11 +51,11 @@ class TaskService
 
         if (content.equals("[]")) return taskList;
 
-        String[] objects = content.substring(1, content.length() - 1).trim().split("\\},\\s*\\{");
+        String[] objects = content.substring(1, content.length() - 1).trim().split("\\}\\s*,\\s*\\{");
 
         for (String obj : objects) {
             obj = obj.replace("{", "").replace("}", "");
-            String[] fields = obj.split(",\\s*\"");
+            String[] fields = obj.split("\\s*,\\s*\"");
 
             int id = 0;
             String desc = "";
@@ -66,9 +85,7 @@ class TaskService
                     case "updatedAt" -> updatedAt = val;
                 }
             }
-
             if (kv.length < 2) { continue; }
-            System.out.println(status);
             taskList.put(id, new Task(id, desc, status, createdAt, updatedAt));
         }
 
@@ -87,6 +104,8 @@ class TaskService
         json = json.substring(0, json.lastIndexOf("]"));
 
         JsonStorage.saveToJson(json + "," + task.toJson() + "]");
+
+        idCounter += 1;
     }
 
     public static void updateTaskById(int id, String desc)
