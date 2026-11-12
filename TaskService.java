@@ -10,7 +10,7 @@ import enums.TaskStatus;
 class TaskService
 {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-    private static int idCounter = 1;
+    private static int idCounter = 0;
 
     public static int getIdCounter()
     {
