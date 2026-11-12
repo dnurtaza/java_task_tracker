@@ -106,6 +106,8 @@ class TaskService
         JsonStorage.saveToJson(json + "," + task.toJson() + "]");
 
         idCounter += 1;
+
+        System.out.println(String.format("Task \"%s\" was added successfully (ID: %d)", task.getDescription(), task.getId()));
     }
 
     public static void updateTaskById(int id, String desc)
@@ -122,6 +124,9 @@ class TaskService
         task.setUpdatedAt(now);
 
         JsonStorage.saveToJson(fromTaskListToJson(taskList));
+
+        System.out.println(String.format("Task description was updated successfully (ID: %d | Description: \"%s\")",
+                id, task.getDescription()));
     }
 
     public static void updateTaskStatusById(int id, TaskStatus status)
@@ -138,6 +143,9 @@ class TaskService
         task.setUpdatedAt(now);
 
         JsonStorage.saveToJson(fromTaskListToJson(taskList));
+
+        System.out.println(String.format("Status of the \"%s\" task was updated successfully (ID: %d | Status: \"%s\")",
+                task.getDescription(), id, task.getStatus().getTitle()));
     }
 
     public static void deleteTaskById(int id)
@@ -149,6 +157,8 @@ class TaskService
         taskList.remove(id);
 
         JsonStorage.saveToJson(fromTaskListToJson(taskList));
+
+        System.out.println(String.format("The task was deleted successfully (ID: %d)", id));
     }
 
     public static void listAllTasks()
