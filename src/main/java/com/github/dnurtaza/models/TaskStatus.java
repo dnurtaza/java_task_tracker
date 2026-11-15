@@ -1,4 +1,4 @@
-package enums;
+package com.github.dnurtaza.models;
 
 import java.util.Arrays;
 

@@ -1,4 +1,8 @@
-import enums.TaskStatus;
+package com.github.dnurtaza;
+
+import com.github.dnurtaza.models.Task;
+import com.github.dnurtaza.models.TaskStatus;
+import com.github.dnurtaza.services.TaskService;
 
 class Main
 {

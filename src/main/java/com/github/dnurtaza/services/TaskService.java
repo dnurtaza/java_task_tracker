@@ -1,3 +1,5 @@
+package com.github.dnurtaza.services;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
@@ -5,9 +7,14 @@ import java.util.Collections;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import enums.TaskStatus;
+import com.github.dnurtaza.models.Task;
+import com.github.dnurtaza.models.TaskStatus;
+import com.github.dnurtaza.storage.JsonStorage;
 
-class TaskService
+// [{"id": 1, "description": "Fix {bugs}", ...}, {"id": 1, "description": "Fix {bugs}", ...}]
+
+
+public class TaskService
 {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private static int idCounter = 0;
@@ -53,8 +60,13 @@ class TaskService
 
         String[] objects = content.substring(1, content.length() - 1).trim().split("\\}\\s*,\\s*\\{");
 
+        outerLoop:
         for (String obj : objects) {
-            obj = obj.replace("{", "").replace("}", "");
+            obj = obj.trim();
+
+            if (obj.startsWith("{")) obj = obj.substring(1);
+            if (obj.endsWith("}")) obj = obj.substring(0, obj.length() - 1);
+
             String[] fields = obj.split("\\s*,\\s*\"");
 
             int id = 0;
@@ -65,11 +77,10 @@ class TaskService
 
             String[] kv = new String[2];
 
-            outerLoop:
             for (String field : fields) {
                 kv = field.replace("\"", "").trim().split("\\s*:\\s*", 2);
 
-                if (kv.length < 2) { break; }
+                if (kv.length < 2) continue  outerLoop;
 
                 String key = kv[0];
                 String val = kv[1];
@@ -85,7 +96,6 @@ class TaskService
                     case "updatedAt" -> updatedAt = val;
                 }
             }
-            if (kv.length < 2) { continue; }
             taskList.put(id, new Task(id, desc, status, createdAt, updatedAt));
         }
 
@@ -107,7 +117,7 @@ class TaskService
 
         idCounter += 1;
 
-        System.out.println(String.format("Task \"%s\" was added successfully (ID: %d)", task.getDescription(), task.getId()));
+        System.out.printf("Task \"%s\" was added successfully (ID: %d)%n", task.getDescription(), task.getId());
     }
 
     public static void updateTaskById(int id, String desc)
@@ -125,8 +135,8 @@ class TaskService
 
         JsonStorage.saveToJson(fromTaskListToJson(taskList));
 
-        System.out.println(String.format("Task description was updated successfully (ID: %d | Description: \"%s\")",
-                id, task.getDescription()));
+        System.out.printf("Task description was updated successfully (ID: %d | Description: \"%s\")%n",
+                id, task.getDescription());
     }
 
     public static void updateTaskStatusById(int id, TaskStatus status)
@@ -144,8 +154,8 @@ class TaskService
 
         JsonStorage.saveToJson(fromTaskListToJson(taskList));
 
-        System.out.println(String.format("Status of the \"%s\" task was updated successfully (ID: %d | Status: \"%s\")",
-                task.getDescription(), id, task.getStatus().getTitle()));
+        System.out.printf("Status of the \"%s\" task was updated successfully (ID: %d | Status: \"%s\")%n",
+                task.getDescription(), id, task.getStatus().getTitle());
     }
 
     public static void deleteTaskById(int id)
@@ -158,7 +168,7 @@ class TaskService
 
         JsonStorage.saveToJson(fromTaskListToJson(taskList));
 
-        System.out.println(String.format("The task was deleted successfully (ID: %d)", id));
+        System.out.printf("The task was deleted successfully (ID: %d)%n", id);
     }
 
     public static void listAllTasks()

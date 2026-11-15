@@ -1,9 +1,9 @@
+package com.github.dnurtaza.models;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import enums.TaskStatus;
-
-class Task
+public class Task
 {
     private int id;
     private String description;
@@ -13,7 +13,7 @@ class Task
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    Task(int id, String description)
+    public Task(int id, String description)
     {
         String currentDateTime = LocalDateTime.now().format(FORMATTER);
 
@@ -24,7 +24,7 @@ class Task
         this.updatedAt = currentDateTime;
     }
 
-    Task(int id, String description, TaskStatus status, String createdAt, String updatedAt)
+    public Task(int id, String description, TaskStatus status, String createdAt, String updatedAt)
     {
         this.id = id;
         this.description = description;
