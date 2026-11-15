@@ -11,9 +11,6 @@ import com.github.dnurtaza.models.Task;
 import com.github.dnurtaza.models.TaskStatus;
 import com.github.dnurtaza.storage.JsonStorage;
 
-// [{"id": 1, "description": "Fix {bugs}", ...}, {"id": 1, "description": "Fix {bugs}", ...}]
-
-
 public class TaskService
 {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
