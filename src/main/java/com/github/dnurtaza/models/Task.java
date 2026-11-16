@@ -15,13 +15,14 @@ public class Task
 
     public Task(int id, String description)
     {
+        this(id, description, TaskStatus.TO_DO);
+    }
+
+    public Task(int id, String description, TaskStatus status)
+    {
         String currentDateTime = LocalDateTime.now().format(FORMATTER);
 
-        this.id = id;
-        this.description = description;
-        this.status = TaskStatus.TO_DO;
-        this.createdAt = currentDateTime;
-        this.updatedAt = currentDateTime;
+        this(id, description, status, currentDateTime, currentDateTime);
     }
 
     public Task(int id, String description, TaskStatus status, String createdAt, String updatedAt)
