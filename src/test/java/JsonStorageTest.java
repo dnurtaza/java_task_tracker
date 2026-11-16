@@ -4,9 +4,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import com.github.dnurtaza.storage.JsonStorage;
+import com.github.dnurtaza.storage.JsonParser;
 
 public class JsonStorageTest
 {
@@ -14,7 +17,7 @@ public class JsonStorageTest
     @MethodSource("escapeCases")
     void escapesSpecialCharacters(String input, String expected)
     {
-        assertEquals(expected, JsonStorage.adjust(input));
+        assertEquals(expected, JsonParser.adjust(input));
     }
 
     static Stream<Arguments> escapeCases()
@@ -27,5 +30,44 @@ public class JsonStorageTest
                 Arguments.of("Escapes \b backspaces", "Escapes \\b backspaces"),
                 Arguments.of("Escapes \f new page", "Escapes \\f new page")
         );
+    }
+
+    @Test
+    void parsesFourTasks()
+    {
+        String json = """
+                [
+                    {"id": 1, "description": "Do homework", "status": "todo", "createdAt": "16.11.2026 10:37", "updatedAt": "16.11.2026 10:37"},
+                    {"id": 2, "description": "Buy food", "status": "in_progress", "createdAt": "16.11.2026 11:37", "updatedAt": "16.11.2026 16:37"},
+                    {"id": 3, "description": "Go to gym food", "status": "todo", "createdAt": "16.11.2026 12:37", "updatedAt": "16.11.2026 12:37"},
+                    {"id": 4, "description": "Call mom", "status": "done", "createdAt": "16.11.2026 13:37", "updatedAt": "16.11.2026 15:37"}
+                ]
+                """;
+
+        List<Map<String, String>> expected = List.of(
+                Map.of("id", "1",
+                        "description", "Do homework",
+                        "status", "todo",
+                        "createdAt", "16.11.2026 10:37",
+                        "updatedAt", "16.11.2026 10:37"),
+
+                Map.of("id", "2",
+                        "description", "Buy food",
+                        "status", "in_progress",
+                        "createdAt", "16.11.2026 11:37",
+                        "updatedAt", "16.11.2026 16:37"),
+                Map.of("id", "3",
+                        "description", "Go to gym food",
+                        "status", "todo",
+                        "createdAt", "16.11.2026 12:37",
+                        "updatedAt", "16.11.2026 12:37"),
+                Map.of("id", "4",
+                        "description", "Call mom",
+                        "status", "done",
+                        "createdAt", "16.11.2026 13:37",
+                        "updatedAt", "16.11.2026 15:37")
+        );
+
+        assertEquals(expected, JsonParser.parseArray(json));
     }
 }
