@@ -3,47 +3,53 @@ package com.github.dnurtaza;
 import com.github.dnurtaza.models.Task;
 import com.github.dnurtaza.models.TaskStatus;
 import com.github.dnurtaza.services.TaskService;
+import com.github.dnurtaza.storage.JsonStorage;
+
+import java.nio.file.Path;
 
 public class Main
 {
     public static void main(String[] args)
     {
+        JsonStorage storage = new JsonStorage(Path.of("tasks.json"));
+        TaskService taskService = new TaskService(storage);
+
         if (args.length > 0) {
-            TaskService.initializeIdCounter();
+            taskService.initializeIdCounter();
             switch (args[0]) {
                 case "add" -> {
                     if (args.length == 1) return;
 
                     String desc = args[1].replace("\"", "");
-                    TaskService.addTask(new Task(TaskService.getIdCounter() + 1, desc));
+                    taskService.addTask(new Task(taskService.getIdCounter() + 1, desc));
                 }
                 case "list" -> {
                     if (args.length == 1) {
-                        TaskService.listAllTasks();
+                        taskService.listAllTasks();
                         return;
                     }
 
-                    TaskService.listTasksByStatus(TaskStatus.fromTitle(args[1]));
+                    taskService.listTasksByStatus(TaskStatus.fromTitle(args[1]));
                 }
                 case "update" -> {
                     if (args.length <= 2) return;
 
-                    TaskService.updateTaskById(Integer.parseInt(args[1]), args[2].replace("\"", ""));
+                    taskService.updateTaskById(Integer.parseInt(args[1]), args[2].replace("\"", ""));
                 }
                 case "delete" -> {
                     if (args.length == 1) return;
 
-                    TaskService.deleteTaskById(Integer.parseInt(args[1]));
+                    taskService.deleteTaskById(Integer.parseInt(args[1]));
                 }
                 case "mark-in-progress" -> {
                     if (args.length == 1) return;
 
-                    TaskService.updateTaskStatusById(Integer.parseInt(args[1]), TaskStatus.IN_PROGRESS);
+                    taskService.updateTaskStatusById(Integer.parseInt(args[1]), TaskStatus.IN_PROGRESS);
                 }
                 case "mark-done" -> {
                     if (args.length == 1) return;
 
-                    TaskService.updateTaskStatusById(Integer.parseInt(args[1]), TaskStatus.DONE);
+                    taskService.updateTaskStatusById(Integer.parseInt(args[1]), TaskStatus.DONE);
                 }
             }
         }

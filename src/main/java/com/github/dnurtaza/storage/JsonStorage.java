@@ -5,21 +5,23 @@ import java.nio.file.Files;
 import java.io.IOException;
 
 public class JsonStorage {
-    private static final String FILE_NAME = "tasks.json";
+    private final Path path;
 
-    public static void saveToJson(String json)
+    public JsonStorage(Path path) {
+        this.path = path;
+    }
+
+    public void save(String json)
     {
         try {
-            Files.writeString(Path.of(FILE_NAME), json);
+            Files.writeString(this.path, json);
         } catch (IOException e) {
             System.err.println("Error, while trying to write: " + e.getMessage());
         }
     }
 
-    public static String readFromJson()
+    public String read()
     {
-        Path path = Path.of(FILE_NAME);
-
         if (!Files.exists(path)) {
             return "[]";
         }
