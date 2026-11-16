@@ -92,7 +92,7 @@ public class TaskService
     {
         String json = storage.read().trim();
 
-        if (json == null || json.equals("[]") || json.isEmpty()) {
+        if (json.equals("[]") || json.isEmpty()) {
             storage.save("[" + task.toJson() + "]");
             return;
         }
@@ -159,7 +159,7 @@ public class TaskService
 
     public void listAllTasks()
     {
-        getTaskList().values().stream()
+        getTaskList().values()
                 .forEach(task -> System.out.println(
                         task.toString()
                 ));
