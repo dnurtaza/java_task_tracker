@@ -155,23 +155,29 @@ public class TaskService
 
     public void listAllTasks()
     {
-        getTaskList().values()
-                .forEach(task -> System.out.println(
-                        task.toString()
-                ));
+        List<Task> tasks = new ArrayList<>(getTaskList().values());
+
+        if (tasks.isEmpty()) {
+            System.out.println("There is no tasks yet.");
+        } else {
+            tasks.forEach(task -> System.out.println(
+                    task.toString()
+            ));
+        }
     }
 
     public void listTasksByStatus(TaskStatus status)
     {
-        Map<Integer, Task> taskList = getTaskList();
+        List<Task> tasks = new ArrayList<>(getTaskList().values());
 
-        if (taskList.isEmpty()) return;
-
-        taskList.values()
-                .stream()
-                .filter(task -> task.getStatus().equals(status))
-                .forEach(task -> System.out.println(
-                    task.toString()
-                ));
+        if (tasks.isEmpty()) {
+            System.out.println("There is no tasks yet.");
+        } else {
+            tasks.stream()
+                    .filter(task -> task.getStatus().equals(status))
+                    .forEach(task -> System.out.println(
+                            task.toString()
+                    ));
+        }
     }
 }

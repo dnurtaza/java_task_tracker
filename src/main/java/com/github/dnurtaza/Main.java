@@ -19,7 +19,7 @@ public class Main
                 case "add" -> {
                     if (args.length == 1) return;
 
-                    String desc = args[1].replace("\"", "");
+                    String desc = args[1];
                     taskService.addTask(desc);
                 }
                 case "list" -> {
@@ -33,7 +33,7 @@ public class Main
                 case "update" -> {
                     if (args.length <= 2) return;
 
-                    taskService.updateTaskById(Integer.parseInt(args[1]), args[2].replace("\"", ""));
+                    taskService.updateTaskById(Integer.parseInt(args[1]), args[2]);
                 }
                 case "delete" -> {
                     if (args.length == 1) return;
