@@ -1,5 +1,7 @@
 package com.github.dnurtaza.models;
 
+import com.github.dnurtaza.storage.JsonParser;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -50,7 +52,7 @@ public class Task
     {
         return String.format(
                 "{\"id\": %d, \"description\": \"%s\", \"status\": \"%s\", \"createdAt\": \"%s\", \"updatedAt\": \"%s\"}",
-                id, description, status.getTitle(), createdAt, updatedAt
+                id, JsonParser.adjust(description), status.getTitle(), createdAt, updatedAt
         );
     }
 
