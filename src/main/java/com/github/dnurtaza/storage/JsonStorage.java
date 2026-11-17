@@ -1,5 +1,6 @@
 package com.github.dnurtaza.storage;
 
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class JsonStorage {
         try {
             Files.writeString(this.path, json);
         } catch (IOException e) {
-            System.err.println("Error, while trying to write: " + e.getMessage());
+            throw new UncheckedIOException("Failed to write " + path, e);
         }
     }
 
@@ -29,7 +30,7 @@ public class JsonStorage {
         try {
             return Files.readString(path).trim();
         } catch (IOException e) {
-            System.err.println("Error, while trying to read: " + e.getMessage());
+            throw new UncheckedIOException("Failed to read " + path, e);
             return "[]";
         }
     }

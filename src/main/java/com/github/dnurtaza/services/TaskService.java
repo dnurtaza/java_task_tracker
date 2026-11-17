@@ -83,21 +83,24 @@ public class TaskService
 
         storage.save(fromTaskListToJson(taskList));
 
-        System.out.printf("Task \"%s\" was added successfully (ID: %d)%n", task.getDescription(), task.getId());
+        return task;
+    }
+
+    public Task findTask(Map<Integer, Task> taskList, int id)
+    {
+        Task task = taskList.get(id);
+
+        if (task == null) {
+            throw new TaskNotFoundException(id);
+        }
 
         return task;
     }
 
-    public void updateTaskById(int id, String desc)
-    {
+    public Task updateTaskById(int id, String desc) {
         Map<Integer, Task> taskList = getTaskList();
 
-        if (taskList.isEmpty() || !taskList.containsKey(id)) {
-            System.err.println("Failed to find a task with ID: " + id);
-            return;
-        }
-
-        Task task = taskList.get(id);
+        Task task = findTask(taskList, id);
 
         task.setDescription(desc);
 
@@ -106,20 +109,14 @@ public class TaskService
 
         storage.save(fromTaskListToJson(taskList));
 
-        System.out.printf("Task description was updated successfully (ID: %d | Description: \"%s\")%n",
-                id, task.getDescription());
+        return task;
     }
 
-    public void updateTaskStatusById(int id, TaskStatus status)
+    public Task updateTaskStatusById(int id, TaskStatus status)
     {
         Map<Integer, Task> taskList = getTaskList();
 
-        if (taskList.isEmpty() || !taskList.containsKey(id)) {
-            System.err.println("Failed to find a task with ID: " + id);
-            return;
-        }
-
-        Task task = taskList.get(id);
+        Task task = findTask(taskList, id);
 
         task.setStatus(status);
 
@@ -128,24 +125,20 @@ public class TaskService
 
         storage.save(fromTaskListToJson(taskList));
 
-        System.out.printf("Status of the \"%s\" task was updated successfully (ID: %d | Status: \"%s\")%n",
-                task.getDescription(), id, task.getStatus().getTitle());
+        return task;
     }
 
-    public  void deleteTaskById(int id)
+    public Task deleteTaskById(int id)
     {
         Map<Integer, Task> taskList = getTaskList();
 
-        if (taskList.isEmpty() || !taskList.containsKey(id)) {
-            System.err.println("Failed to find a task with ID: " + id);
-            return;
-        }
+        Task task = findTask(taskList, id);
 
         taskList.remove(id);
 
         storage.save(fromTaskListToJson(taskList));
 
-        System.out.printf("The task was deleted successfully (ID: %d)%n", id);
+        return task;
     }
 
     public void listAllTasks()
@@ -153,7 +146,7 @@ public class TaskService
         List<Task> tasks = new ArrayList<>(getTaskList().values());
 
         if (tasks.isEmpty()) {
-            System.out.println("There is no tasks yet.");
+            throw new NoTasksException();
         } else {
             tasks.forEach(task -> System.out.println(
                     task.toString()
@@ -166,7 +159,7 @@ public class TaskService
         List<Task> tasks = new ArrayList<>(getTaskList().values());
 
         if (tasks.isEmpty()) {
-            System.out.println("There is no tasks yet.");
+            throw new NoTasksException();
         } else {
             tasks.stream()
                     .filter(task -> task.getStatus().equals(status))
