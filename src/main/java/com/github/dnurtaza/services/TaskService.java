@@ -14,7 +14,7 @@ public class TaskService
 {
     private final JsonStorage storage;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-    private static int idCounter = 0;
+    private static int idCounter = 1;
 
     public TaskService(JsonStorage storage) {
         this.storage = storage;
