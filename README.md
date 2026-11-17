@@ -44,7 +44,7 @@ cd task_tracker
     ```bash
     ./mvnw clean package
     ```
-    This will run the test suite and generate ```task_tracker-1.0-SNAPSHOT.jar``` inside the ```target/``` directory.
+    This will run the test suite and generate `task_tracker-1.0-SNAPSHOT.jar` inside the `target/` directory.
 
 ---
 
