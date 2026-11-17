@@ -15,13 +15,12 @@ public class Main
         TaskService taskService = new TaskService(storage);
 
         if (args.length > 0) {
-            taskService.initializeIdCounter();
             switch (args[0]) {
                 case "add" -> {
                     if (args.length == 1) return;
 
                     String desc = args[1].replace("\"", "");
-                    taskService.addTask(new Task(taskService.getIdCounter() + 1, desc));
+                    taskService.addTask(desc);
                 }
                 case "list" -> {
                     if (args.length == 1) {

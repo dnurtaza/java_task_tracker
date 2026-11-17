@@ -14,24 +14,14 @@ public class TaskService
 {
     private final JsonStorage storage;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-    private static int idCounter = 1;
 
     public TaskService(JsonStorage storage) {
         this.storage = storage;
     }
 
-    public int getIdCounter()
+    public int getAIId()
     {
-        return idCounter;
-    }
-
-    public void initializeIdCounter()
-    {
-        Map<Integer, Task> taskList = getTaskList();
-
-        if (taskList.isEmpty()) return;
-
-        idCounter = Collections.max(taskList.keySet());
+        return getTaskList().keySet().stream().max(Integer::compare).orElse(0) + 1;
     }
 
     public static String fromTaskListToJson(Map<Integer, Task> taskList)
@@ -88,29 +78,29 @@ public class TaskService
         return taskList;
     }
 
-    public void addTask(Task task)
+    public Task addTask(String description)
     {
-        String json = storage.read().trim();
+        Map<Integer, Task> taskList = getTaskList();
+        int id = getAIId();
 
-        if (json.equals("[]") || json.isEmpty()) {
-            storage.save("[" + task.toJson() + "]");
-            return;
-        }
+        Task task = new Task(id, description);
+        taskList.put(id, task);
 
-        json = json.substring(0, json.lastIndexOf("]"));
-
-        storage.save(json + "," + task.toJson() + "]");
-
-        idCounter += 1;
+        storage.save(fromTaskListToJson(taskList));
 
         System.out.printf("Task \"%s\" was added successfully (ID: %d)%n", task.getDescription(), task.getId());
+
+        return task;
     }
 
     public void updateTaskById(int id, String desc)
     {
         Map<Integer, Task> taskList = getTaskList();
 
-        if (taskList.isEmpty() || !taskList.containsKey(id)) return;
+        if (taskList.isEmpty() || !taskList.containsKey(id)) {
+            System.err.println("Failed to find a task with ID: " + id);
+            return;
+        }
 
         Task task = taskList.get(id);
 
@@ -129,7 +119,10 @@ public class TaskService
     {
         Map<Integer, Task> taskList = getTaskList();
 
-        if (taskList.isEmpty() || !taskList.containsKey(id)) return;
+        if (taskList.isEmpty() || !taskList.containsKey(id)) {
+            System.err.println("Failed to find a task with ID: " + id);
+            return;
+        }
 
         Task task = taskList.get(id);
 
@@ -148,7 +141,10 @@ public class TaskService
     {
         Map<Integer, Task> taskList = getTaskList();
 
-        if (taskList.isEmpty() || !taskList.containsKey(id)) return;
+        if (taskList.isEmpty() || !taskList.containsKey(id)) {
+            System.err.println("Failed to find a task with ID: " + id);
+            return;
+        }
 
         taskList.remove(id);
 
