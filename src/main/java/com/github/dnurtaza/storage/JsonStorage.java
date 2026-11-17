@@ -31,7 +31,6 @@ public class JsonStorage {
             return Files.readString(path).trim();
         } catch (IOException e) {
             throw new UncheckedIOException("Failed to read " + path, e);
-            return "[]";
         }
     }
 }
