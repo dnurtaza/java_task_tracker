@@ -48,14 +48,6 @@ public class Task
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
 
-    public String toJson()
-    {
-        return String.format(
-                "{\"id\": %d, \"description\": \"%s\", \"status\": \"%s\", \"createdAt\": \"%s\", \"updatedAt\": \"%s\"}",
-                id, JsonParser.adjust(description), status.getTitle(), createdAt, updatedAt
-        );
-    }
-
     @Override
     public String toString()
     {

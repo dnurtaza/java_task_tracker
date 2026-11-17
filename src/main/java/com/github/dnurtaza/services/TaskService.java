@@ -24,25 +24,6 @@ public class TaskService
         return taskList.keySet().stream().max(Integer::compare).orElse(0) + 1;
     }
 
-    public static String fromTaskListToJson(Map<Integer, Task> taskList)
-    {
-        if (taskList.isEmpty()) return "[]";
-
-        StringBuilder json = new StringBuilder("[");
-
-        int i = 1;
-        for (Task task : taskList.values()) {
-            json.append(task.toJson());
-            if (i != taskList.size()) json.append(',');
-
-            i += 1;
-        }
-
-        json.append(']');
-
-        return json.toString();
-    }
-
     public Map<Integer, Task> getTaskList()
     {
         Map<Integer, Task> taskList = new TreeMap<>();
@@ -81,7 +62,7 @@ public class TaskService
         Task task = new Task(id, description);
         taskList.put(id, task);
 
-        storage.save(fromTaskListToJson(taskList));
+        storage.save(JsonStorage.fromListOfObjectsToJson(new ArrayList<>(taskList.values())));
 
         return task;
     }
@@ -107,7 +88,7 @@ public class TaskService
         String now = LocalDateTime.now().format(FORMATTER);
         task.setUpdatedAt(now);
 
-        storage.save(fromTaskListToJson(taskList));
+        storage.save(JsonStorage.fromListOfObjectsToJson(new ArrayList<>(taskList.values())));
 
         return task;
     }
@@ -123,7 +104,7 @@ public class TaskService
         String now = LocalDateTime.now().format(FORMATTER);
         task.setUpdatedAt(now);
 
-        storage.save(fromTaskListToJson(taskList));
+        storage.save(JsonStorage.fromListOfObjectsToJson(new ArrayList<>(taskList.values())));
 
         return task;
     }
@@ -136,7 +117,7 @@ public class TaskService
 
         taskList.remove(id);
 
-        storage.save(fromTaskListToJson(taskList));
+        storage.save(JsonStorage.fromListOfObjectsToJson(new ArrayList<>(taskList.values())));
 
         return task;
     }
