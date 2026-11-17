@@ -19,9 +19,9 @@ public class TaskService
         this.storage = storage;
     }
 
-    public int getAIId()
+    public int getAIId(Map<Integer, Task> taskList)
     {
-        return getTaskList().keySet().stream().max(Integer::compare).orElse(0) + 1;
+        return taskList.keySet().stream().max(Integer::compare).orElse(0) + 1;
     }
 
     public static String fromTaskListToJson(Map<Integer, Task> taskList)
@@ -47,13 +47,8 @@ public class TaskService
     {
         Map<Integer, Task> taskList = new TreeMap<>();
 
-        List<Map<String, String>> objects;
-        try {
-            objects = JsonParser.parseArray(storage.read());
-        } catch (IllegalArgumentException e) {
-            System.err.println("tasks.json is corrupted " + e.getMessage());
-            return taskList;
-        }
+        List<Map<String, String>> objects = JsonParser.parseArray(storage.read());
+
 
         for (Map<String, String> obj : objects) {
             int id;
@@ -81,7 +76,7 @@ public class TaskService
     public Task addTask(String description)
     {
         Map<Integer, Task> taskList = getTaskList();
-        int id = getAIId();
+        int id = getAIId(taskList);
 
         Task task = new Task(id, description);
         taskList.put(id, task);
