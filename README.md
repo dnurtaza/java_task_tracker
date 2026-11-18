@@ -49,8 +49,8 @@ cd task_tracker
 ---
 
 ## Usage
-### Option 1: Using the Windows Wrapper Script (`task.bat`)
-For convenience on Windows, use the provided `task.bat` script in the root directory:
+### Option 1: Using the Windows Wrapper Script (`task-cli.bat`)
+For convenience on Windows, use the provided `task-cli.bat` script in the root directory:
 ```bash
 # Adding a new task
 .\task-cli add "Buy groceries"
