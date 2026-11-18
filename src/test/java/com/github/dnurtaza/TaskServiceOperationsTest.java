@@ -196,7 +196,7 @@ public class TaskServiceOperationsTest
     {
         service.deleteTaskById(3);
 
-        assertTrue(service.listTasksByStatus(TaskStatus.DONE).isEmpty());
+        assertThrows(NoTasksException.class, () -> service.listTasksByStatus(TaskStatus.DONE));
     }
 
     @Test
