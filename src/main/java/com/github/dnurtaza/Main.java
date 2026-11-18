@@ -10,9 +10,20 @@ import com.github.dnurtaza.storage.JsonStorage;
 
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
+import java.util.Map;
 
 public class Main
 {
+    private static final Map<String, String> commandList = Map.of(
+            "add \"<description>\"", "Add a task with description \"<description>\"",
+            "list", "List all tasks",
+            "list [todo|in-progress|done]", "List tasks with status [todo|in-progress|done]",
+            "update <id> \"<description>\"", "Set description of a task with id <id> to \"<description>\"",
+            "delete <id>", "Delete a task with id <id>",
+            "mark-in-progress <id>", "Set status of a task with id <id> to \"in-progress\"",
+            "mark-done <id>", "Set status of a task with id <id> to \"done\""
+    );
+
     public static void main(String[] args)
     {
         JsonStorage storage = new JsonStorage(Path.of("tasks.json"));
@@ -34,6 +45,14 @@ public class Main
                 System.err.println("Could not access tasks.json: " + e.getCause().getMessage());
                 System.exit(1);
             }
+        }
+    }
+
+    private static void help()
+    {
+        System.out.println("List of commands:");
+        for (Map.Entry<String, String> entry : commandList.entrySet()) {
+            System.out.println(entry.getKey() + " | " + entry.getValue());
         }
     }
 
@@ -83,7 +102,8 @@ public class Main
                 task.getDescription(), task.getId(), task.getStatus().getTitle());
             }
             default -> {
-                throw new UsageException("Unknown command '" + args[0] + '"');
+                System.out.println("Unknown command '" + args[0] + "'");
+                help();
             }
         }
     }

@@ -137,7 +137,7 @@ public class TaskService
         List<Task> tasks = new ArrayList<>(getTaskList().values());
 
         if (tasks.isEmpty()) {
-            throw new NoTasksException();
+            throw new NoTasksException("No tasks yet");
         } else {
             return tasks;
         }
@@ -146,13 +146,13 @@ public class TaskService
 
     public List<Task> listTasksByStatus(TaskStatus status)
     {
-        List<Task> tasks = new ArrayList<>(getTaskList().values());
+        List<Task> tasks = getTaskList().values().stream()
+                .filter(task -> task.getStatus().equals(status)).toList();
 
         if (tasks.isEmpty()) {
-            throw new NoTasksException();
+            throw new NoTasksException("No tasks with status " + status.getTitle());
         } else {
-            return tasks.stream()
-                    .filter(task -> task.getStatus().equals(status)).toList();
+            return tasks;
         }
     }
 }

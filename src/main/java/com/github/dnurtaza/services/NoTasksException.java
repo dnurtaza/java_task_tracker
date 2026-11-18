@@ -2,8 +2,8 @@ package com.github.dnurtaza.services;
 
 public class NoTasksException extends RuntimeException
 {
-    public NoTasksException()
+    public NoTasksException(String msg)
     {
-        super("There are no tasks yet. ");
+        super(msg);
     }
 }

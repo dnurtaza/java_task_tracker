@@ -55,8 +55,8 @@ public class JsonStorage {
                 + "\"id\": " + task.getId() + ", "
                 + "\"description\": \"" + escape(task.getDescription()) + "\", "
                 + "\"status\": \"" + task.getStatus().getTitle() + "\", "
-                + "\"createdAt\": \"" + task.getCreatedAt() + "\", "
-                + "\"updatedAt\": \"" + task.getUpdatedAt() + "\""
+                + "\"createdAt\": \"" + escape(task.getCreatedAt()) + "\", "
+                + "\"updatedAt\": \"" + escape(task.getUpdatedAt()) + "\""
                 + "}";
     }
 
