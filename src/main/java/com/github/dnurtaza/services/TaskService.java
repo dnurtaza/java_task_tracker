@@ -13,7 +13,6 @@ import com.github.dnurtaza.storage.JsonStorage;
 public class TaskService
 {
     private final JsonStorage storage;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     public TaskService(JsonStorage storage) {
         this.storage = storage;
@@ -85,7 +84,7 @@ public class TaskService
 
         task.setDescription(desc);
 
-        String now = LocalDateTime.now().format(FORMATTER);
+        String now = LocalDateTime.now().format(Task.FORMATTER);
         task.setUpdatedAt(now);
 
         storage.save(JsonStorage.fromListOfObjectsToJson(new ArrayList<>(taskList.values())));
@@ -101,7 +100,7 @@ public class TaskService
 
         task.setStatus(status);
 
-        String now = LocalDateTime.now().format(FORMATTER);
+        String now = LocalDateTime.now().format(Task.FORMATTER);
         task.setUpdatedAt(now);
 
         storage.save(JsonStorage.fromListOfObjectsToJson(new ArrayList<>(taskList.values())));
