@@ -22,9 +22,12 @@ public class Task
 
     public Task(int id, String description, TaskStatus status)
     {
-        String currentDateTime = LocalDateTime.now().format(FORMATTER);
+        this(id, description, status, LocalDateTime.now().format(FORMATTER));
+    }
 
-        this(id, description, status, currentDateTime, currentDateTime);
+    private Task(int id, String description, TaskStatus status, String date)
+    {
+        this(id, description, status, date, date);
     }
 
     public Task(int id, String description, TaskStatus status, String createdAt, String updatedAt)
