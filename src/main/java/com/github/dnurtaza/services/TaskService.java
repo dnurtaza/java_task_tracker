@@ -20,7 +20,7 @@ public class TaskService
         this.storage = storage;
     }
 
-    public int getAIId(Map<Integer, Task> taskList)
+    private int nextId(Map<Integer, Task> taskList)
     {
         return taskList.keySet().stream().max(Integer::compare).orElse(0) + 1;
     }
@@ -68,7 +68,7 @@ public class TaskService
     public Task addTask(String description)
     {
         Map<Integer, Task> taskList = getTaskList();
-        int id = getAIId(taskList);
+        int id = nextId(taskList);
 
         Task task = new Task(id, description);
         taskList.put(id, task);
@@ -78,7 +78,7 @@ public class TaskService
         return task;
     }
 
-    public Task findTask(Map<Integer, Task> taskList, int id)
+    private Task findTask(Map<Integer, Task> taskList, int id)
     {
         Task task = taskList.get(id);
 
