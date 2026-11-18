@@ -9,11 +9,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import com.github.dnurtaza.storage.JsonStorage;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class JsonStorageTest
 {
+    @ParameterizedTest
+    @MethodSource("escapeCases")
+    void escapesSpecialCharacters(String input, String expected)
+    {
+        assertEquals(expected, JsonStorage.escape(input));
+    }
+
+    static Stream<Arguments> escapeCases()
+    {
+        return Stream.of(
+                Arguments.of("Escapes \" quotes", "Escapes \\\" quotes"),
+                Arguments.of("Escapes \\ back slashes", "Escapes \\\\ back slashes"),
+                Arguments.of("Escapes \n new line", "Escapes \\n new line"),
+                Arguments.of("Escapes \t horizontal tabs", "Escapes \\t horizontal tabs"),
+                Arguments.of("Escapes \b backspaces", "Escapes \\b backspaces"),
+                Arguments.of("Escapes \f new page", "Escapes \\f new page")
+        );
+    }
+
     @Test
     void convertsListOfTasksToJson()
     {
@@ -26,7 +49,7 @@ public class JsonStorageTest
 
         assertEquals(
                 "[{\"id\": 1, \"description\": \"Do homework\", \"status\": \"todo\", \"createdAt\": \"16.11.2026 10:37\", \"updatedAt\": \"16.11.2026 10:37\"}, {\"id\": 2, \"description\": \"Buy food\", \"status\": \"in-progress\", \"createdAt\": \"16.11.2026 11:37\", \"updatedAt\": \"16.11.2026 16:37\"}, {\"id\": 3, \"description\": \"Go to gym\", \"status\": \"todo\", \"createdAt\": \"16.11.2026 12:37\", \"updatedAt\": \"16.11.2026 12:37\"}, {\"id\": 4, \"description\": \"Call mom\", \"status\": \"done\", \"createdAt\": \"16.11.2026 13:37\", \"updatedAt\": \"16.11.2026 15:37\"}]",
-                JsonStorage.fromListOfObjectsToJson(taskList)
+                JsonStorage.fromListOfTasksToJson(taskList)
         );
     }
 
@@ -53,6 +76,6 @@ public class JsonStorageTest
 
         String expected = "[{\"id\": 1, \"description\": \"Do homework\", \"status\": \"todo\", \"createdAt\": \"16.11.2026 10:37\", \"updatedAt\": \"16.11.2026 10:37\"}, {\"id\": 2, \"description\": \"Buy food\", \"status\": \"in-progress\", \"createdAt\": \"16.11.2026 11:37\", \"updatedAt\": \"16.11.2026 16:37\"}, {\"id\": 3, \"description\": \"Go to gym\", \"status\": \"todo\", \"createdAt\": \"16.11.2026 12:37\", \"updatedAt\": \"16.11.2026 12:37\"}, {\"id\": 4, \"description\": \"Call mom\", \"status\": \"done\", \"createdAt\": \"16.11.2026 13:37\", \"updatedAt\": \"16.11.2026 15:37\"}]";
 
-        assertEquals(expected, JsonStorage.fromListOfObjectsToJson(new ArrayList<>(taskList.values())));
+        assertEquals(expected, JsonStorage.fromListOfTasksToJson(new ArrayList<>(taskList.values())));
     }
 }

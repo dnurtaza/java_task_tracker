@@ -87,29 +87,6 @@ public class JsonParser {
         return object;
     }
 
-    public static String adjust(String text)
-    {
-        StringBuilder sb = new StringBuilder();
-
-        for (char c : text.toCharArray()) {
-            switch (c) {
-                case '"' -> sb.append("\\\"");
-                case '\\' -> sb.append("\\\\");
-                case '\n' -> sb.append("\\n");
-                case '\r' -> sb.append("\\r");
-                case '\t' -> sb.append("\\t");
-                case '\b' -> sb.append("\\b");
-                case '\f' -> sb.append("\\f");
-                default -> {
-                    if (c < 0x20) sb.append(String.format("\\u%04x", (int) c));
-                    else sb.append(c);
-                }
-            }
-        }
-
-        return sb.toString();
-    }
-
     private String readValue()
     {
         if (peek() == '"') return readString();

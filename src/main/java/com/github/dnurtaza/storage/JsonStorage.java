@@ -1,5 +1,6 @@
 package com.github.dnurtaza.storage;
 
+import com.github.dnurtaza.models.Task;
 import com.github.dnurtaza.models.TaskStatus;
 
 import java.io.UncheckedIOException;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JsonStorage {
     private final Path path;
@@ -40,53 +42,44 @@ public class JsonStorage {
         }
     }
 
-    public static Object getJsonFieldValue(Object val)
+    public static String fromListOfTasksToJson(List<Task> taskList)
     {
-        if (val == null) {
-            return "null";
-        } else if (val instanceof Number) {
-            return val.toString();
-        } else if (val instanceof TaskStatus status) {
-            return "\"" + status.getTitle() + "\"";
-        } else {
-            return "\"" + JsonParser.adjust(val.toString()) + "\"";
-        }
+        return taskList.stream()
+                .map(JsonStorage::fromObjectToJson)
+                .collect(Collectors.joining(", ", "[", "]"));
     }
 
-    public static String fromListOfObjectsToJson(List<?> objectList)
+    public static String fromObjectToJson(Task task)
     {
-        if (objectList.isEmpty()) return "[]";
-
-        List<String> json = new ArrayList<>();
-
-        objectList.forEach(object -> {
-            json.add(fromObjectToJson(object));
-        });
-
-        return "[" + String.join(", ", json) + "]";
+        return "{"
+                + "\"id\": " + task.getId() + ", "
+                + "\"description\": \"" + escape(task.getDescription()) + "\", "
+                + "\"status\": \"" + task.getStatus().getTitle() + "\", "
+                + "\"createdAt\": \"" + task.getCreatedAt() + "\", "
+                + "\"updatedAt\": \"" + task.getUpdatedAt() + "\""
+                + "}";
     }
 
-    public static String fromObjectToJson(Object object)
+    public static String escape(String text)
     {
-        List<String> json = new ArrayList<>();
-        Field[] fields = object.getClass().getDeclaredFields();
+        StringBuilder sb = new StringBuilder();
 
-        for (Field field : fields) {
-            int modifiers = field.getModifiers();
-            if (Modifier.isStatic(modifiers) || Modifier.isTransient(modifiers)) {
-                continue;
-            }
-
-            try {
-                field.setAccessible(true);
-                Object value = field.get(object);
-
-                json.add("\"" + field.getName() + "\": " + getJsonFieldValue(value));
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("Failed while accessing the field: " + field);
+        for (char c : text.toCharArray()) {
+            switch (c) {
+                case '"' -> sb.append("\\\"");
+                case '\\' -> sb.append("\\\\");
+                case '\n' -> sb.append("\\n");
+                case '\r' -> sb.append("\\r");
+                case '\t' -> sb.append("\\t");
+                case '\b' -> sb.append("\\b");
+                case '\f' -> sb.append("\\f");
+                default -> {
+                    if (c < 0x20) sb.append(String.format("\\u%04x", (int) c));
+                    else sb.append(c);
+                }
             }
         }
 
-        return "{" + String.join(", ", json) + "}";
+        return sb.toString();
     }
 }
