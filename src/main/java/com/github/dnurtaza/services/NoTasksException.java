@@ -4,6 +4,6 @@ public class NoTasksException extends RuntimeException
 {
     public NoTasksException()
     {
-        super("There is no tasks yet. ");
+        super("There are no tasks yet. ");
     }
 }
