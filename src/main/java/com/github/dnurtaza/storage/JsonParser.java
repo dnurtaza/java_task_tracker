@@ -195,8 +195,8 @@ public class JsonParser {
         return pos < s.length() ? s.charAt(pos) : '\0';
     }
 
-    private IllegalArgumentException error(String msg)
+    private JsonParseException error(String msg)
     {
-        return new IllegalArgumentException(msg + " (position " + pos + ")");
+        return new JsonParseException(msg + " (position " + pos + ")");
     }
 }

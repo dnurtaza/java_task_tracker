@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 
 import com.github.dnurtaza.models.Task;
 import com.github.dnurtaza.models.TaskStatus;
+import com.github.dnurtaza.storage.CorruptedStorageException;
+import com.github.dnurtaza.storage.JsonParseException;
 import com.github.dnurtaza.storage.JsonParser;
 import com.github.dnurtaza.storage.JsonStorage;
 
@@ -25,29 +27,39 @@ public class TaskService
 
     public Map<Integer, Task> getTaskList()
     {
+        List<Map<String, String>> objects;
+        try {
+            objects = JsonParser.parseArray(storage.read());
+        } catch (JsonParseException e) {
+            throw new CorruptedStorageException("Invalid JSON: " + e.getMessage(), e);
+        }
+
         Map<Integer, Task> taskList = new TreeMap<>();
-
-        List<Map<String, String>> objects = JsonParser.parseArray(storage.read());
-
 
         for (Map<String, String> obj : objects) {
             int id;
             try {
                 id = Integer.parseInt(obj.get("id"));
             } catch (NumberFormatException e) {
-                System.err.println("Skipping task with invalid id: " + obj.get("id"));
-                continue;
+                throw new CorruptedStorageException("Invalid id: '" + obj.get("id") + "'", e);
+            }
+
+            if (taskList.containsKey(id)) {
+                throw new CorruptedStorageException("Duplicate id: " + id);
             }
 
             TaskStatus status = TaskStatus.fromTitle(obj.get("status"));
             if (status == null) {
-                System.err.println("Skipping task with invalid status: '" + obj.get("status") + "'");
-                continue;
+                throw new CorruptedStorageException("Invalid status '" + obj.get("status") + "' in task " + id);
             }
 
-            taskList.put(id,
-                    new Task(id, obj.get("description"), status, obj.getOrDefault("createdAt", ""), obj.getOrDefault("updatedAt", ""))
-            );
+            String description = obj.get("description");
+            if (description == null) {
+                throw new CorruptedStorageException("Missing description in task " + id);
+            }
+
+            taskList.put(id, new Task(id, description, status,
+                    obj.getOrDefault("createdAt", ""), obj.getOrDefault("updatedAt", "")));
         }
 
         return taskList;

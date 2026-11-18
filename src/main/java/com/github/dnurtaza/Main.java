@@ -5,6 +5,7 @@ import com.github.dnurtaza.models.TaskStatus;
 import com.github.dnurtaza.services.NoTasksException;
 import com.github.dnurtaza.services.TaskNotFoundException;
 import com.github.dnurtaza.services.TaskService;
+import com.github.dnurtaza.storage.CorruptedStorageException;
 import com.github.dnurtaza.storage.JsonStorage;
 
 import java.io.UncheckedIOException;
@@ -20,7 +21,7 @@ public class Main
         if (args.length > 0) {
             try {
                 run(args, service);
-            } catch (IllegalArgumentException e) {
+            } catch (CorruptedStorageException e) {
                 System.err.println("tasks.json is corrupted, nothing was changed: " + e.getMessage());
                 System.exit(1);
             } catch (UsageException e) {
