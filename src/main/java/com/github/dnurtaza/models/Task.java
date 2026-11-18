@@ -7,10 +7,10 @@ import java.time.format.DateTimeFormatter;
 
 public class Task
 {
-    private int id;
+    private final int id;
     private String description;
     private TaskStatus status;
-    private String createdAt;
+    private final String createdAt;
     private String updatedAt;
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
@@ -45,10 +45,8 @@ public class Task
     public String getCreatedAt() { return createdAt; }
     public String getUpdatedAt() { return updatedAt; }
 
-    public void setId(int id) { this.id = id; }
     public void setDescription(String description) { this.description = description; }
     public void setStatus(TaskStatus status) { this.status = status; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
 
     @Override
