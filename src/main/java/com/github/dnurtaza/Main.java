@@ -48,12 +48,16 @@ public class Main
             }
             case "list" -> {
                 if (args.length == 1) {
-                    service.listAllTasks();
+                    service.listAllTasks().forEach(task -> {
+                        System.out.println(task.toString());
+                    });
                     return;
                 }
 
                 requireArgs(args, 2, "list [todo|in-progress|done]");
-                service.listTasksByStatus(parseStatus(args[1]));
+                service.listTasksByStatus(parseStatus(args[1])).forEach(task -> {
+                    System.out.println(task.toString());
+                });
             }
             case "update" -> {
                 requireArgs(args, 3, "update <id> \"<description>\"");

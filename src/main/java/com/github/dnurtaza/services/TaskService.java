@@ -133,31 +133,27 @@ public class TaskService
         return task;
     }
 
-    public void listAllTasks()
+    public List<Task> listAllTasks()
     {
         List<Task> tasks = new ArrayList<>(getTaskList().values());
 
         if (tasks.isEmpty()) {
             throw new NoTasksException();
         } else {
-            tasks.forEach(task -> System.out.println(
-                    task.toString()
-            ));
+            return tasks;
         }
+
     }
 
-    public void listTasksByStatus(TaskStatus status)
+    public List<Task> listTasksByStatus(TaskStatus status)
     {
         List<Task> tasks = new ArrayList<>(getTaskList().values());
 
         if (tasks.isEmpty()) {
             throw new NoTasksException();
         } else {
-            tasks.stream()
-                    .filter(task -> task.getStatus().equals(status))
-                    .forEach(task -> System.out.println(
-                            task.toString()
-                    ));
+            return tasks.stream()
+                    .filter(task -> task.getStatus().equals(status)).toList();
         }
     }
 }
