@@ -1,3 +1,5 @@
+package com.github.dnurtaza;
+
 import com.github.dnurtaza.storage.JsonParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
