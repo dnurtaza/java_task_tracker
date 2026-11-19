@@ -72,7 +72,7 @@ public class TaskService
         Task task = new Task(id, description);
         taskList.put(id, task);
 
-        storage.save(JsonStorage.fromListOfTasksToJson(new ArrayList<>(taskList.values())));
+        storage.save(taskList);
 
         return task;
     }
@@ -98,7 +98,7 @@ public class TaskService
         String now = LocalDateTime.now().format(Task.FORMATTER);
         task.setUpdatedAt(now);
 
-        storage.save(JsonStorage.fromListOfTasksToJson(new ArrayList<>(taskList.values())));
+        storage.save(taskList);
 
         return task;
     }
@@ -114,7 +114,7 @@ public class TaskService
         String now = LocalDateTime.now().format(Task.FORMATTER);
         task.setUpdatedAt(now);
 
-        storage.save(JsonStorage.fromListOfTasksToJson(new ArrayList<>(taskList.values())));
+        storage.save(taskList);
 
         return task;
     }
@@ -127,7 +127,7 @@ public class TaskService
 
         taskList.remove(id);
 
-        storage.save(JsonStorage.fromListOfTasksToJson(new ArrayList<>(taskList.values())));
+        storage.save(taskList);
 
         return task;
     }

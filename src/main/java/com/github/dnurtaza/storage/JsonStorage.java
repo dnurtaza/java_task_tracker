@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JsonStorage {
@@ -16,8 +17,9 @@ public class JsonStorage {
         this.path = path;
     }
 
-    public void save(String json)
+    public void save(Map<Integer, Task> taskList)
     {
+        String json = fromListOfTasksToJson(taskList.values().stream().toList());
         try {
             Files.writeString(this.path, json);
         } catch (IOException e) {
