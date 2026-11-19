@@ -82,7 +82,7 @@ java -jar target/task_tracker-1.0-SNAPSHOT.jar <command> [arguments]
 ```bash
 # Adding a new task
 java -jar target/task_tracker-1.0-SNAPSHOT.jar add "Buy groceries"
-# Output: Task added successfully (ID: 1)
+# Output: Task "Buy groceries" was added successfully (ID: 1)
 
 # Updating and deleting tasks
 java -jar target/task_tracker-1.0-SNAPSHOT.jar update 1 "Buy groceries and cook dinner"
