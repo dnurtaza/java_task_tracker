@@ -10,11 +10,12 @@ import com.github.dnurtaza.storage.JsonStorage;
 
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Main
 {
-    private static final Map<String, String> commandList = Map.of(
+    public static final Map<String, String> commandList = new LinkedHashMap<>(Map.of(
             "add \"<description>\"", "Add a task with description \"<description>\"",
             "list", "List all tasks",
             "list [todo|in-progress|done]", "List tasks with status [todo|in-progress|done]",
@@ -22,7 +23,7 @@ public class Main
             "delete <id>", "Delete a task with id <id>",
             "mark-in-progress <id>", "Set status of a task with id <id> to \"in-progress\"",
             "mark-done <id>", "Set status of a task with id <id> to \"done\""
-    );
+    ));
 
     public static void main(String[] args)
     {
@@ -48,7 +49,7 @@ public class Main
         }
     }
 
-    private static void help()
+    public static void help()
     {
         System.out.println("List of commands:");
         for (Map.Entry<String, String> entry : commandList.entrySet()) {
@@ -56,7 +57,7 @@ public class Main
         }
     }
 
-    private static void run(String[] args, TaskService service)
+    public static void run(String[] args, TaskService service)
     {
         switch (args[0]) {
             case "add" -> {
@@ -102,13 +103,13 @@ public class Main
                 task.getDescription(), task.getId(), task.getStatus().getTitle());
             }
             default -> {
-                System.out.println("Unknown command '" + args[0] + "'");
                 help();
+                throw new UsageException("Unknown command '" + args[0] + "'");
             }
         }
     }
 
-    private static int parseId(String i) {
+    public static int parseId(String i) {
         int id;
 
         try {
@@ -124,7 +125,7 @@ public class Main
         return id;
     }
 
-    private static TaskStatus parseStatus(String s)
+    public static TaskStatus parseStatus(String s)
     {
         TaskStatus status = TaskStatus.fromTitle(s);
 
@@ -135,7 +136,7 @@ public class Main
         return status;
     }
 
-    private static void requireArgs(String[] args, int expected, String syntax)
+    public static void requireArgs(String[] args, int expected, String syntax)
     {
         if (args.length < expected) {
             throw new UsageException("Not enough arguments. Usage: .\\task-cli " + syntax);
@@ -144,7 +145,7 @@ public class Main
         }
     }
 
-    private static String requireNotBlank(String desc)
+    public static String requireNotBlank(String desc)
     {
         if (desc.isBlank()) {
             throw new UsageException("Description must not be empty");
@@ -153,7 +154,7 @@ public class Main
         return desc.trim();
     }
 
-    private static class UsageException extends RuntimeException
+    public static class UsageException extends RuntimeException
     {
         UsageException(String message)
         {
