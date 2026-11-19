@@ -78,16 +78,6 @@ public class JsonStorage {
                 throw new CorruptedStorageException("Missing description in task " + id);
             }
 
-            String createdAt = obj.get("createdAt");
-            if (createdAt == null) {
-                throw new CorruptedStorageException("Missing creation date in task " + id);
-            }
-
-            String updateAt = obj.get("updateAt");
-            if (updateAt == null) {
-                throw new CorruptedStorageException("Missing update date in task " + id);
-            }
-
             taskList.put(id, new Task(id, description, status,
                     obj.getOrDefault("createdAt", ""), obj.getOrDefault("updatedAt", "")));
         }

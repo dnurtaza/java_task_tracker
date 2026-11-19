@@ -37,6 +37,11 @@ public class Task
         this.updatedAt = updatedAt;
     }
 
+    public void touch()
+    {
+        this.updatedAt = LocalDateTime.now().format(FORMATTER);
+    }
+
     public int getId() { return id; }
     public String getDescription() { return description; }
     public TaskStatus getStatus() { return status; }
