@@ -6,9 +6,6 @@ import java.time.LocalDateTime;
 
 import com.github.dnurtaza.models.Task;
 import com.github.dnurtaza.models.TaskStatus;
-import com.github.dnurtaza.storage.CorruptedStorageException;
-import com.github.dnurtaza.storage.JsonParseException;
-import com.github.dnurtaza.storage.JsonParser;
 import com.github.dnurtaza.storage.JsonStorage;
 
 public class TaskService
@@ -26,42 +23,7 @@ public class TaskService
 
     public Map<Integer, Task> getTaskList()
     {
-        List<Map<String, String>> objects;
-        try {
-            objects = JsonParser.parseArray(storage.read());
-        } catch (JsonParseException e) {
-            throw new CorruptedStorageException("Invalid JSON: " + e.getMessage(), e);
-        }
-
-        Map<Integer, Task> taskList = new TreeMap<>();
-
-        for (Map<String, String> obj : objects) {
-            int id;
-            try {
-                id = Integer.parseInt(obj.get("id"));
-            } catch (NumberFormatException e) {
-                throw new CorruptedStorageException("Invalid id: '" + obj.get("id") + "'", e);
-            }
-
-            if (taskList.containsKey(id)) {
-                throw new CorruptedStorageException("Duplicate id: " + id);
-            }
-
-            TaskStatus status = TaskStatus.fromTitle(obj.get("status"));
-            if (status == null) {
-                throw new CorruptedStorageException("Invalid status '" + obj.get("status") + "' in task " + id);
-            }
-
-            String description = obj.get("description");
-            if (description == null) {
-                throw new CorruptedStorageException("Missing description in task " + id);
-            }
-
-            taskList.put(id, new Task(id, description, status,
-                    obj.getOrDefault("createdAt", ""), obj.getOrDefault("updatedAt", "")));
-        }
-
-        return taskList;
+        return storage.load();
     }
 
     public Task addTask(String description)
