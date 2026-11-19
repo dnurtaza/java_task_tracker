@@ -20,6 +20,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -394,8 +395,8 @@ public class MainTest
 
         String help = output();
         assertTrue(help.startsWith("List of commands:"), help);
-        for (String usage : Main.commandList.keySet()) {
-            assertTrue(help.contains(usage), "Help is missing: " + usage);
+        for (Main.Command command : Main.commandList) {
+            assertTrue(help.contains(command.syntax()), "Help is missing: " + command.caption());
         }
     }
 

@@ -10,20 +10,22 @@ import com.github.dnurtaza.storage.JsonStorage;
 
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main
 {
-    static final Map<String, String> commandList = new LinkedHashMap<>(Map.of(
-            "add \"<description>\"", "Add a task with description \"<description>\"",
-            "list", "List all tasks",
-            "list [todo|in-progress|done]", "List tasks with status [todo|in-progress|done]",
-            "update <id> \"<description>\"", "Set description of a task with id <id> to \"<description>\"",
-            "delete <id>", "Delete a task with id <id>",
-            "mark-in-progress <id>", "Set status of a task with id <id> to \"in-progress\"",
-            "mark-done <id>", "Set status of a task with id <id> to \"done\""
-    ));
+    record Command(String syntax, String caption) {}
+
+    static final List<Command> commandList = List.of(
+            new Command("add \"<description>\"", "Add a task with description \"<description>\""),
+            new Command("list", "List all tasks"),
+            new Command("list [todo|in-progress|done]", "List tasks with status [todo|in-progress|done]"),
+            new Command("update <id> \"<description>\"", "Set description of a task with id <id> to \"<description>\""),
+            new Command("delete <id>", "Delete a task with id <id>"),
+            new Command("mark-in-progress <id>", "Set status of a task with id <id> to \"in-progress\""),
+            new Command("mark-done <id>", "Set status of a task with id <id> to \"done\"")
+    );
 
     public static void main(String[] args)
     {
@@ -46,15 +48,18 @@ public class Main
                 System.err.println("Could not access tasks.json: " + e.getCause().getMessage());
                 System.exit(1);
             }
+        } else {
+            help();
         }
     }
 
     static void help()
     {
         System.out.println("List of commands:");
-        for (Map.Entry<String, String> entry : commandList.entrySet()) {
-            System.out.println(entry.getKey() + " | " + entry.getValue());
-        }
+        commandList.forEach( command -> {
+                System.out.println(command.syntax() + " | " + command.caption());
+            }
+        );
     }
 
     static void run(String[] args, TaskService service)
