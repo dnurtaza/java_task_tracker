@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Main
 {
-    public static final Map<String, String> commandList = new LinkedHashMap<>(Map.of(
+    static final Map<String, String> commandList = new LinkedHashMap<>(Map.of(
             "add \"<description>\"", "Add a task with description \"<description>\"",
             "list", "List all tasks",
             "list [todo|in-progress|done]", "List tasks with status [todo|in-progress|done]",
@@ -49,7 +49,7 @@ public class Main
         }
     }
 
-    public static void help()
+    static void help()
     {
         System.out.println("List of commands:");
         for (Map.Entry<String, String> entry : commandList.entrySet()) {
@@ -57,7 +57,7 @@ public class Main
         }
     }
 
-    public static void run(String[] args, TaskService service)
+    static void run(String[] args, TaskService service)
     {
         switch (args[0]) {
             case "add" -> {
@@ -109,7 +109,7 @@ public class Main
         }
     }
 
-    public static int parseId(String i) {
+    static int parseId(String i) {
         int id;
 
         try {
@@ -125,7 +125,7 @@ public class Main
         return id;
     }
 
-    public static TaskStatus parseStatus(String s)
+    static TaskStatus parseStatus(String s)
     {
         TaskStatus status = TaskStatus.fromTitle(s);
 
@@ -136,7 +136,7 @@ public class Main
         return status;
     }
 
-    public static void requireArgs(String[] args, int expected, String syntax)
+    static void requireArgs(String[] args, int expected, String syntax)
     {
         if (args.length < expected) {
             throw new UsageException("Not enough arguments. Usage: .\\task-cli " + syntax);
@@ -145,7 +145,7 @@ public class Main
         }
     }
 
-    public static String requireNotBlank(String desc)
+    static String requireNotBlank(String desc)
     {
         if (desc.isBlank()) {
             throw new UsageException("Description must not be empty");
@@ -154,7 +154,7 @@ public class Main
         return desc.trim();
     }
 
-    public static class UsageException extends RuntimeException
+    static class UsageException extends RuntimeException
     {
         UsageException(String message)
         {

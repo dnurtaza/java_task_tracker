@@ -38,7 +38,6 @@ public class MainTest
 
     private final PrintStream originalOut = System.out;
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream err = new ByteArrayOutputStream();
 
     @BeforeEach
     void setUp()
@@ -55,11 +54,6 @@ public class MainTest
     }
 
     private String output()
-    {
-        return out.toString(StandardCharsets.UTF_8);
-    }
-
-    private String errors()
     {
         return out.toString(StandardCharsets.UTF_8);
     }
