@@ -2,8 +2,6 @@ package com.github.dnurtaza.services;
 
 import java.util.*;
 
-import java.time.LocalDateTime;
-
 import com.github.dnurtaza.models.Task;
 import com.github.dnurtaza.models.TaskStatus;
 import com.github.dnurtaza.storage.JsonStorage;
@@ -57,8 +55,7 @@ public class TaskService
 
         task.setDescription(desc);
 
-        String now = LocalDateTime.now().format(Task.FORMATTER);
-        task.setUpdatedAt(now);
+        task.touch();
 
         storage.save(taskList);
 
@@ -73,8 +70,7 @@ public class TaskService
 
         task.setStatus(status);
 
-        String now = LocalDateTime.now().format(Task.FORMATTER);
-        task.setUpdatedAt(now);
+        task.touch();
 
         storage.save(taskList);
 
