@@ -32,7 +32,7 @@ public class JsonStorage {
         }
     }
 
-    public String read()
+    private String read()
     {
         if (!Files.exists(path)) {
             return "[]";

@@ -391,6 +391,9 @@ public class MainTest
     @Test
     void unknownCommandPrintsErrorAndHelp()
     {
+        Main.UsageException e = assertThrows(Main.UsageException.class, () -> run("foo"));
+        assertEquals("Unknown command 'foo'", e.getMessage());
+
         assertThrows(Main.UsageException.class, () -> run("foo"));
 
         String help = output();
