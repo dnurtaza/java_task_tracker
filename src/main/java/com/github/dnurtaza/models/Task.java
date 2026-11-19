@@ -1,7 +1,5 @@
 package com.github.dnurtaza.models;
 
-import com.github.dnurtaza.storage.JsonParser;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
