@@ -11,7 +11,7 @@ public class Task
     private final String createdAt;
     private String updatedAt;
 
-    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     public Task(int id, String description)
     {
@@ -50,7 +50,6 @@ public class Task
 
     public void setDescription(String description) { this.description = description; }
     public void setStatus(TaskStatus status) { this.status = status; }
-    public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
 
     @Override
     public String toString()
